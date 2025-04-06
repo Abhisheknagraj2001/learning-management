@@ -1,10 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"nodemon index.js\" \"vite\""
+    "start": "node server.js",
+    "dev": "concurrently \"nodemon server.js\" \"vite\""
   },
   "keywords": [],
   "author": "",

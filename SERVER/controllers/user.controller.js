@@ -10,14 +10,14 @@ export const register = async(req,res) => {
             return res.status(400).json({
                 success:false,
                 message:"All fields are required."
-            })
+            });
         }
         const  user = await User.findOne({email});
         if(user){
             return res.status(400).json({
                 success:false,
-                message:"User already exist with this email."
-            })
+                message:"User already exist with this email.",
+            });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
        await User.create({
@@ -25,6 +25,12 @@ export const register = async(req,res) => {
         email,
         password:hashedPassword
        });
+       console.log("Registered User →", {
+        name,
+        email,
+        password // Note: In production, avoid logging plain passwords!
+    });
+
        return res.status(201).json({
         success:true,
         message:"Account created successfully."
@@ -34,39 +40,42 @@ export const register = async(req,res) => {
        return res.status(500).json({
         success:false,
         message:"Failed to register"
-       }) 
+       }) ;
     }
-}
+};
 export const login = async (req,res) => {
+    console.log("🔐 Login route hit");
+ 
     try {
+      
         const {email, password} = req.body;
         if(!email || !password){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required."
-            })
+            });
         }  
         const user = await User.findOne({email});
         if(!user){
-            return req.status(400).json({
-                success:false,
-                message:"Incorrect email or password"
-            })
-        }
-        const isPasswordMatch = await bcrypt.compare(password,user.password);
-        if(!isPasswordMatch){
-            return req.status(400).json({
+            return res.status(400).json({
                 success:false,
                 message:"Incorrect email or password"
             });
         }
-        generateToken(req,user,`welcome back ${user.name}`);
+        const isPasswordMatch = await bcrypt.compare(password,user.password);
+        if(!isPasswordMatch){
+            return res.status(400).json({
+                success:false,
+                message:"Incorrect email or password"
+            });
+        }
+        generateToken(res,user,`welcome back ${user.name}`);
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
          success:false,
          message:"Failed to login"
-        }) 
+        }) ;
     }
 }
