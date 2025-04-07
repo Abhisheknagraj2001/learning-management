@@ -1,5 +1,6 @@
 // password -- 6Ew06xDpZhCwDAKN
 import "tailwindcss/tailwind.css";
+import { useEffect } from "react"; 
 
 import { Button } from "@/components/ui/button"
 import {
@@ -33,6 +34,7 @@ const Login = () => {
     const [registerUser, { data: registerData, error: registerError, isLoading: registerIsLoading, isSuccess: registerIsSuccess }] = useRegisterUserMutation()
     const [loginUser, { data: loginData, error: loginError, isLoading: loginIsLoading, isSuccess: loginIsSuccess }] = useLoginUserMutation()
 
+   
     const changeInputHandler = (e, type) => {
         const { name, value } = e.target;
         if (type === "signup") {
@@ -49,6 +51,14 @@ const Login = () => {
 
 
     };
+
+    useEffect( ( ) => {},[
+        loginIsLoading,
+        registerIsLoading,
+        loginData,
+        registerData,
+        loginError,registerError
+       ]);
 
     return (
         <div className="flex items-center w-full justify-center m-4 p-4">
@@ -73,7 +83,7 @@ const Login = () => {
                                     value={signupInput.name}
                                     onChange={(e) => changeInputHandler(e, "signup")}
                                     placeholder="eg.Abhishek"
-                                    required="true" />
+                                    required />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Email</Label>
@@ -82,7 +92,7 @@ const Login = () => {
                                     value={signupInput.email}
                                     onChange={(e) => changeInputHandler(e, "signup")}
                                     placeholder="eg.Abhishek@gmail.com"
-                                    required="true" />
+                                    required />
                             </div>
                             <div className="space-y-1">
                                 <Label htmlFor="username">Password</Label>
